@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Testaufgabe - Social Media Workflow (Agentur Philipp)
 
-## Getting Started
+Hallo, hier ist meine Lösung für die Testaufgabe. Ich habe versucht, den Kernablauf so einfach und nachvollziehbar wie möglich zu halten. 
 
-First, run the development server:
+## 1. Wie man das Projekt startet
+Um das Projekt lokal zu starten:
+1. `npm install` ausführen.
+2. `npm run dev` starten.
+3. Im Browser `http://localhost:3000` aufrufen.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 2. Architektur & Annahmen
+* **Tech-Stack:** Ich habe Next.js (App Router) mit React, TypeScript und Tailwind CSS genutzt.
+* **Datenhaltung:** Da es ein Prototyp ist und keine echte Datenbank gefordert war, nutze ich für die 5 Ideen einfachen React-State (`useState`). So bleibt der Code schlank.
+* **Workflow (Status):** Jede Idee hat einen Status (`DRAFT`, `IN_REVIEW`, `APPROVED`, `PUBLISHED`). 
+* **Änderungsschutz:** Wenn man in der Detailansicht den Text ändert, springt der Status automatisch zurück auf `DRAFT` und die Version erhöht sich.
+* **Publishing-Schnittstelle:** Die Übergabe wird durch ein JSON simuliert, das als Alert im Browser aufploppt. Eine echte API-Anbindung habe ich weggelassen, da das laut Aufgabe nicht nötig war.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 3. KI-Simulation
+Echte API-Keys waren nicht erlaubt. Daher habe ich die Texte (Briefings) fest im Code hinterlegt. Das entspricht der simulierten KI. Wenn man das später mit einer echten KI (z.B. OpenAI) verbinden will, müsste man nur die Funktion austauschen, die den Text generiert.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 4. Tests (Screenshots)
+Hier sind die Nachweise für die vier geforderten Tests.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Test 1: Kapazitätsprüfung (Rote Warnung)**
+Wenn Person A über 90 Minuten kommt, wird der Kasten rot.
+<img width="1070" height="505" alt="image" src="https://github.com/user-attachments/assets/2bd303a3-6a26-461e-b2de-7511a0c7ff48" />
 
-## Learn More
+**Test 2: Änderung nach Freigabe**
+Sobald der Text im Detail geändert wird, springt der Status wieder auf "DRAFT" und die Version zählt hoch.
+<img width="317" height="463" alt="image" src="https://github.com/user-attachments/assets/62a8cd24-4dd7-4096-b24b-2cd55860633c" />
 
-To learn more about Next.js, take a look at the following resources:
+**Test 3: Fehlende Freigabe blockiert Übergabe**
+Der Button "Publish" erscheint erst, wenn der Status auf "APPROVED" steht. Sonst kann man nichts veröffentlichen.
+<img width="310" height="479" alt="image" src="https://github.com/user-attachments/assets/9dbfcbae-4ec8-4f89-b90b-352c1a5630bd" />
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Test 4: Einmalige Übergabe (JSON)**
+Nach dem Klick auf Publish wird ein JSON generiert. Der Button verschwindet danach, damit nichts doppelt gesendet wird.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 5. Konzeptionelle Ergänzungen (Teil 2 der Aufgabe)
+Hier meine kurzen Gedanken zu den Ausbau-Themen:
 
-## Deploy on Vercel
+* **Erfolgsmessung:** Ich würde UTM-Parameter an die Links hängen. Wichtig ist, im Dashboard fehlende Werte als "Unbekannt" anzuzeigen und nicht einfach 0. Mehrfachzählungen muss man in der Datenbank filtern.
+* **Wirtschaftlichkeit:** Kosten pro Anfrage kann man nur berechnen, wenn man genug Daten hat. Wichtig ist, Umsatz und reinen Gewinn (Deckungsbeitrag) zu trennen. Wenn der Nenner 0 ist, sollte man keine Quote ausgeben.
+* **Kommentare:** Die KI kann Antworten vorschlagen, aber ein Mensch muss sie immer freigeben. Bei Beschwerden sollte die KI gar nichts machen, sondern direkt an das Team weiterleiten.
+* **Betrieb:** Ich würde einen Cronjob nutzen, der z.B. nachts prüft, ob etwas freigegeben ist und es dann postet. Wenn die API nicht antwortet, muss das System eine Warnung an den Admin schicken und den Status auf "Fehler" setzen.
+* **Kapazitätsplanung:** Die Minuten werden vom System abgezogen. Freie Beratungstermine würde ich getrennt davon in einem Kalender verwalten.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 6. Bearbeitungszeit und offene Punkte
+* **Zeit:** Ich habe für die Aufgabe ca. 3,5 bis 4 Stunden gebraucht (inkl. dieser README).
+* **Offene Punkte:** Die Daten sind aktuell nur im Browser-State und gehen beim Neuladen der Seite verloren (echte DB fehlt). Das Design ist sehr basic gehalten, und die KI-Texte sind wie gesagt nur simuliert.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vielen Dank für die Aufgabe, es hat Spaß gemacht!
